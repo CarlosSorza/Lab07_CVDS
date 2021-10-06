@@ -12,6 +12,6 @@
 
 ![image](https://user-images.githubusercontent.com/88836525/136274464-89fc12b8-aca4-4ffd-839c-8498317a4026.png)
 
-En la clase JDBCExample juste los parámetros de conexión a la base de datos con los datos reales:
+- En la clase JDBCExample juste los parámetros de conexión a la base de datos con los datos reales:
 
 ![image](https://user-images.githubusercontent.com/88836525/136274223-e1e464e8-6388-4dc2-bf36-12f65db28100.png)
