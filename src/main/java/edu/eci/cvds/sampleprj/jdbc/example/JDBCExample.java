@@ -58,7 +58,7 @@ public class JDBCExample {
             
             
             int suCodigoECI=20134423;
-            registrarNuevoProducto(con, suCodigoECI, "SU NOMBRE", 99999999);            
+            registrarNuevoProducto(con, suCodigoECI, "Carlos Sorza", 99999999);            
             con.commit();
                         
             
@@ -81,9 +81,15 @@ public class JDBCExample {
      */
     public static void registrarNuevoProducto(Connection con, int codigo, String nombre,int precio) throws SQLException{
         //Crear preparedStatement
+        PreparedStatement registrar_producto;
         //Asignar parámetros
+        String insert = "INSERT INTO ORD_PRODUCTOS " + "VALUES (?,?,?);";
         //usar 'execute'
-
+        registrar_producto = con.prepareStatement(insert);
+        registrar_producto.setInt(1,codigo);
+        registrar_producto.setString(2,nombre);
+        registrar_producto.setInt(3,precio);
+        registrar_producto.executeUpdate();
         
         con.commit();
         
@@ -100,15 +106,24 @@ public class JDBCExample {
         
         //Crear prepared statement
 
-        preparedStatement producto_solicitado;
+        PreparedStatement producto_solicitud;
 
         //asignar parámetros
 
-        String select = 
+        String select = "SELECT Pr.nombre " 
+                + "FROM ORD_PRODUCTOS AS Pr " 
+                + "INNER JOIN ORD_DETALLE_PEDIDO AS Dp " 
+                + "ON Dp.producto_fk = Pr.codigo " 
+                + "WHERE Dp.pedido_fk = ? ;";
         //usar executeQuery
         //Sacar resultados del ResultSet
+        producto_solicitud = con.PrepareStatement( select );
+        producto_solicitud.setInt( 1, codigoPedido);
+        ResultSet resultSet = producto_solicitud.executeQuery();
         //Llenar la lista y retornarla
-        
+        while(resultSet.next()){
+            np.add(resultSet.getString(1));
+        }
         return np;
     }
 
@@ -122,11 +137,23 @@ public class JDBCExample {
     public static int valorTotalPedido(Connection con, int codigoPedido){
         
         //Crear prepared statement
+        int  total =0;
+        PreparedStatement valor = null;
         //asignar parámetros
+        String select = "SELECT SUM(Po.precio*Op.cantidad) " 
+                + "FROM ORD_PRODUCTOS Po " 
+                + "INNER JOIN  ORD_DETALLE_PEDIDO Op " 
+                + " ON Po.codigo = Op.producto_fk " 
+                + "WHERE Op.pedido_fk = ? ;";
         //usar executeQuery
+        valor = con.prepareStatement( select );
+        valor.setInt(1, codigoPedido);
+        ResultSet resultSet = valor.executeQuery();
         //Sacar resultado del ResultSet
-        
-        return 0;
+        while ( resultSet.next() ){
+            total+= resultSet.getInt(1);
+        }
+        return total;
     }
     
 
