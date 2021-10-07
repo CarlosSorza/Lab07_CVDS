@@ -17,7 +17,8 @@
 package edu.eci.cvds.samples.services.client;
 
 
-
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ClienteMapper;
+import edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.SQLException;
@@ -65,6 +66,13 @@ public class MyBatisExample {
         
         //Crear el mapper y usarlo: 
         //ClienteMapper cm=sqlss.getMapper(ClienteMapper.class)
+        ClienteMapper cm=sqlss.getMapper(ClienteMapper.class);
+        
+        System.out.println(cm.consultarClientes());
+        ItemMapper ItemM = sqlss.getMapper(ItemMapper.class);
+        System.out.println(ItemM.consultarItems());
+        
+       
         //cm...
         
         

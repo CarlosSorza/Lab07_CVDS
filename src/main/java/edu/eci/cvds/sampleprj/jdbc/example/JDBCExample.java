@@ -34,7 +34,7 @@ public class JDBCExample {
     
     public static void main(String args[]){
         try {
-            String url="jjdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/bdprueba";
+            String url="jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/bdprueba";
             String driver="com.mysql.jdbc.Driver";
             String user="bdprueba";
             String pwd="prueba2019";
@@ -101,29 +101,31 @@ public class JDBCExample {
      * @param codigoPedido el código del pedido
      * @return 
      */
-    public static List<String> nombresProductosPedido(Connection con, int codigoPedido){
-        List<String> np=new LinkedList<>();
+    public static List<String> nombresProductosPedido(Connection con, int codigoPedido)throws SQLException{
+         List<String> np=new LinkedList<>();
         
         //Crear prepared statement
-
-        PreparedStatement producto_solicitud;
-
+        PreparedStatement productosPedido;
         //asignar parámetros
-
         String select = "SELECT Pr.nombre " 
                 + "FROM ORD_PRODUCTOS AS Pr " 
                 + "INNER JOIN ORD_DETALLE_PEDIDO AS Dp " 
                 + "ON Dp.producto_fk = Pr.codigo " 
                 + "WHERE Dp.pedido_fk = ? ;";
+        
+                        
+                        
+                        
         //usar executeQuery
         //Sacar resultados del ResultSet
-        producto_solicitud = con.PrepareStatement( select );
-        producto_solicitud.setInt( 1, codigoPedido);
-        ResultSet resultSet = producto_solicitud.executeQuery();
+        productosPedido = con.prepareStatement( select );
+        productosPedido.setInt( 1, codigoPedido);
+        ResultSet resultSet = productosPedido.executeQuery();
         //Llenar la lista y retornarla
         while(resultSet.next()){
             np.add(resultSet.getString(1));
         }
+        
         return np;
     }
 
@@ -134,7 +136,7 @@ public class JDBCExample {
      * @param codigoPedido código del pedido cuyo total se calculará
      * @return el costo total del pedido (suma de: cantidades*precios)
      */
-    public static int valorTotalPedido(Connection con, int codigoPedido){
+    public static int valorTotalPedido(Connection con, int codigoPedido)throws SQLException{
         
         //Crear prepared statement
         int  total =0;
